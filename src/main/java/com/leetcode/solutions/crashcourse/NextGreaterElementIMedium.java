@@ -8,31 +8,22 @@ public class NextGreaterElementIMedium {
 
     }
 
-    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-        int[] answer = new int[nums1.length];
-        Arrays.fill(answer, -1);
+    public int[] nextGreaterElement1(int[] nums1, int[] nums2) {
 
-        for(int i = 0; i < nums1.length; i++){
-            answer = findNextGreaterElement(nums2, nums1[i], answer);
-        }
-        return answer;
-    }
-
-    int[] findNextGreaterElement(int[] nums2, int startingPoint, int[] answer){
-        Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < nums2.length; i++){
-            map.put(nums2[i], i);
-        }
-
+        Map<Integer, Integer> nextGreater = new HashMap<>();
         Deque<Integer> stack = new ArrayDeque<>();
 
-        int indexOfStartingPoint = map.get(startingPoint);
-        for(int j = indexOfStartingPoint; j < nums2.length; j++){
-            while(!stack.isEmpty() && nums2[j] > stack.peek()){
-                answer[j] = stack.peek();
+        for(int num : nums2){
+            while(!stack.isEmpty() && num > stack.peek()){
+                nextGreater.put(stack.peek(), num);
+                stack.pop();
             }
-            stack.push(nums2[j]);
+            stack.push(num);
+        }
 
+        int[] answer = new int[nums1.length];
+        for(int i = 0; i < nums1.length; i++){
+            answer[i] = nextGreater.getOrDefault(nums1[i], -1);
         }
         return answer;
     }
